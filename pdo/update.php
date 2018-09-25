@@ -4,16 +4,16 @@
   include ('conn.php'); 
 
   $status = '';
-  $result = '';
   //melakukan pengecekan apakah ada variable GET yang dikirim
   if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       if (isset($_GET['nrp'])) {
           //query SQL
           $nrp_upd = $_GET['nrp'];
-          $query = "SELECT * FROM mhs WHERE nrp = '$nrp_upd'"; 
-
+          $query = $conn->prepare("SELECT * FROM mhs WHERE nrp = :nrp");
+          //binding data
+          $query->bindParam(':nrp',$nrp_upd);
           //eksekusi query
-          $result = mysqli_query(connection(),$query);
+          $query->execute(); 
       }  
   }
 
@@ -24,11 +24,16 @@
       $jenis_kelamin = $_POST['jenis_kelamin'];
       $alamat = $_POST['alamat'];
       //query SQL
-      $sql = "UPDATE mhs SET nama='$nama', jenis_kelamin='$jenis_kelamin', alamat='$alamat' WHERE nrp='$nrp'";
+      $query = $conn->prepare("UPDATE mhs SET nama=:nama, jenis_kelamin=:jenis_kelamin, alamat=:alamat WHERE nrp=:nrp"); 
+
+      //binding data
+      $query->bindParam(':nrp',$nrp);
+      $query->bindParam(':nama',$nama);
+      $query->bindParam(':jenis_kelamin',$jenis_kelamin);
+      $query->bindParam(':alamat',$alamat);
 
       //eksekusi query
-      $result = mysqli_query(connection(),$sql);
-      if ($result) {
+      if ($query->execute()) {
         $status = 'ok';
       }
       else{
@@ -59,10 +64,10 @@
 
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
           <div class="sidebar-sticky">
             <ul class="nav flex-column" style="margin-top:100px;">
-              <li class="nav-item">
+               <li class="nav-item">
                 <a class="nav-link active" href="<?php echo "index.php"; ?>">Data Mahasiswa</a>
               </li>
               <li class="nav-item">
@@ -77,10 +82,10 @@
 
           <h2 style="margin: 30px 0 30px 0;">Update Data Mahasiswa</h2>
           <form action="update.php" method="POST">
-            <?php while($data = mysqli_fetch_array($result)): ?>
+            <?php while($data = $query->fetch(PDO::FETCH_ASSOC)): ?>
             <div class="form-group">
               <label>NRP</label>
-              <input type="text" class="form-control" placeholder="NRP mahasiswa" name="nrp" value="<?php echo $data['nrp'];  ?>" required="required" readonly>
+              <input type="text" class="form-control" placeholder="NRP mahasiswa" name="nrp" value="<?php echo $data['nrp'];  ?>" readonly required="required">
             </div>
             <div class="form-group">
               <label>Nama</label>

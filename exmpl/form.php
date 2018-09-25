@@ -69,23 +69,23 @@
             
             <div class="form-group">
               <label>NRP</label>
-              <input type="text" class="form-control" placeholder="NRP mahasiswa" name="nrp">
+              <input type="text" class="form-control" placeholder="NRP mahasiswa" name="nrp" required="required">
             </div>
             <div class="form-group">
               <label>Nama</label>
-              <input type="text" class="form-control" placeholder="Nama mahasiswa" name="nama">
+              <input type="text" class="form-control" placeholder="Nama mahasiswa" name="nama" required="required">
             </div>
             <div class="form-group">
               <label>Jenis Kelamin</label>
-              <select class="custom-select" name="jenis_kelamin">
-                <option selected>Pilih Salah Satu</option>
+              <select class="custom-select" name="jenis_kelamin" required="required">
+                <option value="">Pilih Salah Satu</option>
                 <option value="L">Laki-Laki</option>
                 <option value="P">Perempuan</option>
               </select>
             </div>
             <div class="form-group">
               <label>Alamat</label>
-              <textarea class="form-control" name="alamat"></textarea>
+              <textarea class="form-control" name="alamat" required="required"></textarea>
             </div>
             
             <button type="submit" class="btn btn-primary">Simpan</button>
@@ -94,6 +94,7 @@
       </div>
     </div>
 
-    <script src="assets/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
   </body>
 </html>

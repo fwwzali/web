@@ -60,13 +60,15 @@
               </thead>
               <tbody>
                 <?php 
-                  //proses menampilkan data dari database:
+                  //proses menampilkan data dari database dengan PDO:
                   //siapkan query SQL
                   $query = "SELECT * FROM mhs";
-                  $result = mysqli_query(connection(),$query);
+                  //eksekusi query
+                  $result = $conn->query($query);
+
                  ?>
 
-                 <?php while($data = mysqli_fetch_array($result)): ?>
+                 <?php while($data = $result->fetch(PDO::FETCH_ASSOC) ): ?>
                   <tr>
                     <td><?php echo $data['nrp'];  ?></td>
                     <td><?php echo $data['nama'];  ?></td>

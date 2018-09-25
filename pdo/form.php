@@ -4,45 +4,32 @@
   include ('conn.php'); 
 
   $status = '';
-  $result = '';
-  //melakukan pengecekan apakah ada variable GET yang dikirim
-  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      if (isset($_GET['nrp'])) {
-          //query SQL
-          $nrp_upd = $_GET['nrp'];
-          $query = "SELECT * FROM mhs WHERE nrp = '$nrp_upd'"; 
-
-          //eksekusi query
-          $result = mysqli_query(connection(),$query);
-      }  
-  }
-
   //melakukan pengecekan apakah ada form yang dipost
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $nrp = $_POST['nrp'];
       $nama = $_POST['nama'];
       $jenis_kelamin = $_POST['jenis_kelamin'];
       $alamat = $_POST['alamat'];
-      //query SQL
-      $sql = "UPDATE mhs SET nama='$nama', jenis_kelamin='$jenis_kelamin', alamat='$alamat' WHERE nrp='$nrp'";
+      
+      //query with PDO
+      $query = $conn->prepare("INSERT INTO mhs (nrp, nama, jenis_kelamin, alamat) VALUES(:nrp, :nama, :jenis_kelamin, :alamat)"); 
+
+      //binding data
+      $query->bindParam(':nrp',$nrp);
+      $query->bindParam(':nama',$nama);
+      $query->bindParam(':jenis_kelamin',$jenis_kelamin);
+      $query->bindParam(':alamat',$alamat);
 
       //eksekusi query
-      $result = mysqli_query(connection(),$sql);
-      if ($result) {
+      if ($query->execute()) {
         $status = 'ok';
       }
       else{
         $status = 'err';
       }
-
-      //redirect ke halaman lain
-      header('Location: index.php?status='.$status);
   }
-  
 
 ?>
-
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -59,14 +46,14 @@
 
     <div class="container-fluid">
       <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
           <div class="sidebar-sticky">
             <ul class="nav flex-column" style="margin-top:100px;">
-              <li class="nav-item">
-                <a class="nav-link active" href="<?php echo "index.php"; ?>">Data Mahasiswa</a>
+               <li class="nav-item">
+                <a class="nav-link" href="<?php echo "index.php"; ?>">Data Mahasiswa</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="<?php echo "form.php"; ?>">Tambah Data</a>
+                <a class="nav-link active" href="<?php echo "form.php"; ?>">Tambah Data</a>
               </li>
             </ul>
           </div>
@@ -74,31 +61,39 @@
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
           
+          <?php 
+              if ($status=='ok') {
+                echo '<br><br><div class="alert alert-success" role="alert">Data Mahasiswa berhasil disimpan</div>';
+              }
+              elseif($status=='err'){
+                echo '<br><br><div class="alert alert-danger" role="alert">Data Mahasiswa gagal disimpan</div>';
+              }
+           ?>
 
-          <h2 style="margin: 30px 0 30px 0;">Update Data Mahasiswa</h2>
-          <form action="update.php" method="POST">
-            <?php while($data = mysqli_fetch_array($result)): ?>
+          <h2 style="margin: 30px 0 30px 0;">Form Mahasiswa</h2>
+          <form action="form.php" method="POST">
+            
             <div class="form-group">
               <label>NRP</label>
-              <input type="text" class="form-control" placeholder="NRP mahasiswa" name="nrp" value="<?php echo $data['nrp'];  ?>" required="required" readonly>
+              <input type="text" class="form-control" placeholder="NRP mahasiswa" name="nrp" required="required">
             </div>
             <div class="form-group">
               <label>Nama</label>
-              <input type="text" class="form-control" placeholder="Nama mahasiswa" name="nama" value="<?php echo $data['nama'];  ?>" required="required">
+              <input type="text" class="form-control" placeholder="Nama mahasiswa" name="nama" required="required">
             </div>
             <div class="form-group">
               <label>Jenis Kelamin</label>
               <select class="custom-select" name="jenis_kelamin" required="required">
-                <option value="">Pilih Salah Satu</option>
-                <option value="L" <?php echo $data['jenis_kelamin']=='L' ? "selected" : "" ?>>Laki-Laki</option>
-                <option value="P" <?php echo $data['jenis_kelamin']=='P' ? "selected" : "" ?>>Perempuan</option>
+                <option selected value="">Pilih Salah Satu</option>
+                <option value="L">Laki-Laki</option>
+                <option value="P">Perempuan</option>
               </select>
             </div>
             <div class="form-group">
               <label>Alamat</label>
-              <textarea class="form-control" name="alamat" required="required"><?php echo $data['alamat'];  ?></textarea>
+              <textarea class="form-control" name="alamat" required="required"></textarea>
             </div>
-            <?php endwhile; ?>
+            
             <button type="submit" class="btn btn-primary">Simpan</button>
           </form>
         </main>
