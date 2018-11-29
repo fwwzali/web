@@ -17,5 +17,3 @@
    {
       echo "Failed Connect to Database Server : " . $err->getMessage();
    }
-
-   

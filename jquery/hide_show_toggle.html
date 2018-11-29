@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Hide & Show Toggle</title>
+	<script type="text/javascript" src="src/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+	<p style="display: none">
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+		tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+	</p>
+	<button id="show">Show Article</button>
+	<button id="hide">Hide Article</button>
+	<button id="toggle">Toggle Article</button>
+	<button id="fadein">Show Fadein Article</button>
+	<button id="fadeout">Hide Fadeout Article</button>
+	<button id="fadetoggle">Fade Toggle Article</button>
+</body>
+</html>
+
+<script type="text/javascript">
+	$('#show').click(function(){
+		$('p').show('slow');
+	});
+	$('#hide').click(function(){
+		$('p').hide('fast');
+	});
+	$('#toggle').click(function(){
+		$('p').toggle('fast');
+	});
+	$('#fadein').click(function(){
+		$('p').fadeIn('slow');
+	});
+	$('#fadeout').click(function(){
+		$('p').fadeOut('slow');
+	});
+	$('#fadetoggle').click(function(){
+		$('p').fadeToggle();
+	});
+</script>
+
