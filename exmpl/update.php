@@ -1,7 +1,7 @@
-<?php 
+<?php
   //memanggil file conn.php yang berisi koneski ke database
   //dengan include, semua kode dalam file conn.php dapat digunakan pada file index.php
-  include ('conn.php'); 
+  include ('conn.php');
 
   $status = '';
   $result = '';
@@ -10,11 +10,11 @@
       if (isset($_GET['nrp'])) {
           //query SQL
           $nrp_upd = $_GET['nrp'];
-          $query = "SELECT * FROM mhs WHERE nrp = '$nrp_upd'"; 
+          $query = "SELECT * FROM mhs WHERE nrp = '$nrp_upd'";
 
           //eksekusi query
           $result = mysqli_query(connection(),$query);
-      }  
+      }
   }
 
   //melakukan pengecekan apakah ada form yang dipost
@@ -38,7 +38,7 @@
       //redirect ke halaman lain
       header('Location: index.php?status='.$status);
   }
-  
+
 
 ?>
 
@@ -73,7 +73,7 @@
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          
+
 
           <h2 style="margin: 30px 0 30px 0;">Update Data Mahasiswa</h2>
           <form action="update.php" method="POST">
@@ -94,6 +94,7 @@
                 <option value="P" <?php echo $data['jenis_kelamin']=='P' ? "selected" : "" ?>>Perempuan</option>
               </select>
             </div>
+
             <div class="form-group">
               <label>Alamat</label>
               <textarea class="form-control" name="alamat" required="required"><?php echo $data['alamat'];  ?></textarea>
